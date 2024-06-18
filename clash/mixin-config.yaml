@@ -1,0 +1,5 @@
+mixin: # 注意下面缩进
+  rules:
+    - DOMAIN-SUFFIX,gitlab.ubtrobot.com,DIRECT
+    - DOMAIN-SUFFIX,gitlab.ubt.com,DIRECT
+    - IP-CIDR,129.68.11.2/24,DIRECT
