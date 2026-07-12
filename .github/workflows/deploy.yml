@@ -29,6 +29,14 @@ jobs:
       - name: 拉取代码
         uses: actions/checkout@v4
 
+      - name: 设置 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: 自动生成导航页（递归扫描所有 HTML）
+        run: python scripts/generate_nav.py
+
       - name: 配置 Pages
         uses: actions/configure-pages@v4
 

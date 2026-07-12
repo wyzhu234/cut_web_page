@@ -6,123 +6,287 @@
   <title>学习笔记导航</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, 'Segoe UI', system-ui, sans-serif; background: #f5f5f5; color: #333; padding: 40px 20px; }
-    .container { max-width: 960px; margin: 0 auto; }
-    h1 { font-size: 28px; margin-bottom: 8px; }
+    body { font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+           background: #f5f5f5; color: #333; padding: 40px 20px; }
+    .container { max-width: 1000px; margin: 0 auto; }
+    h1 { font-size: 28px; margin-bottom: 4px; }
     .subtitle { color: #666; margin-bottom: 32px; font-size: 14px; }
-    .category { background: #fff; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
-    .category h2 { font-size: 18px; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid #e8e8e8; color: #2c3e50; }
-    .file-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 6px; }
-    .file-list a { display: block; padding: 6px 10px; color: #0366d6; text-decoration: none; font-size: 14px; border-radius: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .category { background: #fff; border-radius: 8px; padding: 20px; margin-bottom: 16px;
+                box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+    .category h2 { font-size: 17px; margin-bottom: 10px; padding-bottom: 6px;
+                   border-bottom: 2px solid #e8e8e8; color: #2c3e50; }
+    .category h2 .count { font-size: 12px; color: #999; font-weight: normal; margin-left: 6px; }
+    .file-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2px; }
+    .file-list a { display: block; padding: 5px 8px; color: #0366d6; text-decoration: none;
+                   font-size: 13.5px; border-radius: 4px; overflow: hidden;
+                   text-overflow: ellipsis; white-space: nowrap; }
     .file-list a:hover { background: #f0f6ff; }
-    .file-count { font-size: 12px; color: #999; margin-left: 6px; }
-  </style>
+    .file-list .subdir-label { grid-column: 1 / -1; font-size: 12px; color: #999;
+                               padding: 8px 8px 2px; margin-top: 4px; border-top: 1px dashed #eee; }
+    .search-box { width: 100%; padding: 10px 14px; font-size: 15px; border: 2px solid #ddd;
+                  border-radius: 8px; margin-bottom: 20px; outline: none; transition: .2s; }
+    .search-box:focus { border-color: #0366d6; }
+</style>
 </head>
 <body>
 <div class="container">
   <h1>📚 学习笔记</h1>
-  <p class="subtitle">深度学习 / 计算机视觉 / 工程实践 · 共 120+ 篇</p>
-
-  <div class="category" id="dl-yolo">
-    <h2>YOLO 目标检测</h2>
-    <div class="file-list" data-dir="dl/yolo"></div>
-  </div>
-
-  <div class="category" id="dl-cnn">
-    <h2>CNN 卷积神经网络</h2>
-    <div class="file-list" data-dir="dl/1_cnn"></div>
-  </div>
-
-  <div class="category" id="dl-transformer">
-    <h2>Transformer</h2>
-    <div class="file-list" data-dir="dl/2_transformer"></div>
-  </div>
-
-  <div class="category" id="dl-rag">
-    <h2>RAG 检索增强生成</h2>
-    <div class="file-list" data-dir="dl/3_rag"></div>
-  </div>
-
-  <div class="category" id="dl-llm">
-    <h2>大语言模型</h2>
-    <div class="file-list" data-dir="dl/llm"></div>
-  </div>
-
-  <div class="category" id="dl-conception">
-    <h2>深度学习概念</h2>
-    <div class="file-list" data-dir="dl/conception"></div>
-  </div>
-
-  <div class="category" id="dl-task">
-    <h2>论文与任务</h2>
-    <div class="file-list" data-dir="dl/task"></div>
-  </div>
-
-  <div class="category" id="hardware">
-    <h2>硬件 / 传感器</h2>
-    <div class="file-list" data-dir="hardware"></div>
-  </div>
-
-  <div class="category" id="clash">
-    <h2>网络工具</h2>
-    <div class="file-list" data-dir="clash"></div>
-  </div>
-
-  <div class="category" id="tool">
-    <h2>开发工具</h2>
-    <div class="file-list" data-dir="tool_develop"></div>
-  </div>
-
-  <div class="category" id="cv">
-    <h2>计算机视觉</h2>
-    <div class="file-list" data-dir="cv"></div>
-  </div>
-
-  <div class="category" id="robot">
-    <h2>机器人</h2>
-    <div class="file-list" data-dir="robot"></div>
-  </div>
-
-  <div class="category" id="python">
-    <h2>Python 生态</h2>
-    <div class="file-list" data-dir="package_python"></div>
-  </div>
-
-  <div class="category" id="cpp">
-    <h2>C++ 生态</h2>
-    <div class="file-list" data-dir="package_cpp"></div>
+  <p class="subtitle">深度学习 / 计算机视觉 / 工程实践 · 共 121 篇</p>
+  <input type="text" id="search" class="search-box" placeholder="🔍 搜索笔记标题..." autofocus>
+  <div class="category">
+  <h2>🎯 YOLO 目标检测 <span class="count">(11 篇)</span></h2>
+  <div class="file-list">
+    <div class="subdir-label">📂 dl › yolo</div>
+    <a href="dl/yolo/YOLO%20Evolution%EF%BC%9A%20A%20Comprehensive%20Benchmark%20and%20Architectural%20Review%20of%20YOLOv12%2C%20YOLO11%2C%20and%20Their%20Previous%20Versions%20%282025_9_1%2010%EF%BC%9A53%EF%BC%9A33%29.html" title="YOLO Evolution： A Comprehensive Benchmark and Architectural Review of YOLOv12, YOLO11, and Their Previous Versions (2025_9_1 10：53：33)">YOLO Evolution： A Comprehensive Benchmark and Architectural Review of YOLOv12, YOLO11, and Their Previous Versions (2025_9_1 10：53：33)</a>
+    <a href="dl/yolo/YOLOv11%E5%85%A8%E7%B3%BB%E5%88%97%E6%A8%A1%E5%9D%97%E8%AF%A6%E8%A7%A3.html" title="YOLOv11全系列模块详解">YOLOv11全系列模块详解</a>
+    <a href="dl/yolo/YOLOv4%EF%BC%9AOptimal%20Speed%20and%20Accuracy%20of%20Object%20Detection%20-%20welcome%20to%20x-jeff%20blog.html" title="YOLOv4：Optimal Speed and Accuracy of Object Detection - welcome to x-jeff blog">YOLOv4：Optimal Speed and Accuracy of Object Detection - welcome to x-jeff blog</a>
+    <a href="dl/yolo/YOLOv5%20-%20welcome%20to%20x-jeff%20blog.html" title="YOLOv5 - welcome to x-jeff blog">YOLOv5 - welcome to x-jeff blog</a>
+    <a href="dl/yolo/YOLOv5%E6%A0%B8%E5%BF%83%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%AE%8C%E6%95%B4%E8%AE%B2%E8%A7%A3%20-%20%E7%9F%A5%E4%B9%8E.html" title="YOLOv5核心基础知识完整讲解 - 知乎">YOLOv5核心基础知识完整讲解 - 知乎</a>
+    <a href="dl/yolo/YOLOv5%E7%9A%84%E5%8E%9F%E7%90%86%E4%B8%8E%E6%A0%B8%E5%BF%83%E4%BB%A3%E7%A0%81%E8%A7%A3%E6%9E%90-CSDN%E5%8D%9A%E5%AE%A2.html" title="YOLOv5的原理与核心代码解析-CSDN博客">YOLOv5的原理与核心代码解析-CSDN博客</a>
+    <a href="dl/yolo/YOLOv6%E3%80%81YOLOv7%E3%80%81YOLOv8%E3%80%81YOLOv11%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84%E5%9B%BE%28%E6%B8%85%E6%99%B0%E7%89%88%29.html" title="YOLOv6、YOLOv7、YOLOv8、YOLOv11网络结构图(清晰版)">YOLOv6、YOLOv7、YOLOv8、YOLOv11网络结构图(清晰版)</a>
+    <a href="dl/yolo/YOLOv8%20%E6%9E%B6%E6%9E%84%E8%AF%A6%E8%A7%A3%EF%BC%9A%E5%9B%BE%E7%A4%BA%20%EF%BC%8B%20%E4%BB%A3%E7%A0%81.html" title="YOLOv8 架构详解：图示 ＋ 代码">YOLOv8 架构详解：图示 ＋ 代码</a>
+    <a href="dl/yolo/YOLOv8%E7%9A%84%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E3%80%81%E5%AE%9E%E4%BE%8B%E5%88%86%E5%89%B2%E3%80%81%E5%85%B3%E8%8A%82%E7%82%B9%E4%BC%B0%E8%AE%A1%E7%9A%84%E5%8E%9F%E7%90%86-important.html" title="YOLOv8的目标检测、实例分割、关节点估计的原理-important">YOLOv8的目标检测、实例分割、关节点估计的原理-important</a>
+    <a href="dl/yolo/YOLOv8%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84Backbone_neck_head.html" title="YOLOv8网络结构Backbone_neck_head">YOLOv8网络结构Backbone_neck_head</a>
+    <a href="dl/yolo/%E6%BA%90%E7%A0%81%E7%BA%A7%E8%A7%A3%E8%AF%BB%EF%BC%9AYOLO26%E7%9A%84%E6%96%B0%E6%9E%B6%E6%9E%84%E4%B8%8E%E5%88%9B%E6%96%B0%E8%AE%BE%E8%AE%A1.html" title="源码级解读：YOLO26的新架构与创新设计">源码级解读：YOLO26的新架构与创新设计</a>
   </div>
 </div>
-
+<div class="category">
+  <h2>🧠 CNN 卷积神经网络 <span class="count">(1 篇)</span></h2>
+  <div class="file-list">
+    <div class="subdir-label">📂 dl › 1_cnn</div>
+    <a href="dl/1_cnn/%E9%80%9A%E9%81%93%E6%B3%A8%E6%84%8F%E5%8A%9BSENet.html" title="通道注意力SENet">通道注意力SENet</a>
+  </div>
+</div>
+<div class="category">
+  <h2>🔄 Transformer <span class="count">(19 篇)</span></h2>
+  <div class="file-list">
+    <div class="subdir-label">📂 Attention</div>
+    <a href="dl/2_transformer/Attention/MHA%2C%20MQA%2C%20GQA%EF%BC%9A%E5%88%AB%E5%86%8D%E5%86%99%E4%B8%89%E4%B8%AA%E7%B1%BB%E4%BA%86%EF%BC%8C%E4%B8%80%E4%B8%AA%E9%80%9A%E7%94%A8%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%A8%A1%E5%9D%97%E5%B0%B1%E5%A4%9F%E4%BA%86.html" title="MHA, MQA, GQA：别再写三个类了，一个通用注意力模块就够了">MHA, MQA, GQA：别再写三个类了，一个通用注意力模块就够了</a>
+    <a href="dl/2_transformer/Attention/%E7%BA%BF%E6%80%A7%E6%B3%A8%E6%84%8F%E5%8A%9B.html" title="线性注意力">线性注意力</a>
+    <div class="subdir-label">📂 dl › 2_transformer</div>
+    <a href="dl/2_transformer/1%E4%BB%8EQ%E5%92%8CK%E7%90%86%E8%A7%A3Transformer%E7%9A%84%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6.html" title="1从Q和K理解Transformer的注意力机制">1从Q和K理解Transformer的注意力机制</a>
+    <a href="dl/2_transformer/2Transformer%E4%B8%AD%E7%9A%84%E5%A4%9A%E5%A4%B4%E6%B3%A8%E6%84%8F%E5%8A%9B%E8%AF%A6%E8%A7%A3.html" title="2Transformer中的多头注意力详解">2Transformer中的多头注意力详解</a>
+    <a href="dl/2_transformer/3%E4%B8%BA%E4%BB%80%E4%B9%88Transformer%E5%B0%91%E4%B8%8D%E4%BA%86%E5%89%8D%E9%A6%88%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%88FFN%EF%BC%89%EF%BC%88%E4%B8%80%EF%BC%89.html" title="3为什么Transformer少不了前馈神经网络（FFN）（一）">3为什么Transformer少不了前馈神经网络（FFN）（一）</a>
+    <a href="dl/2_transformer/4%E4%B8%BA%E4%BB%80%E4%B9%88Transformer%E5%B0%91%E4%B8%8D%E4%BA%86%E5%89%8D%E9%A6%88%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%88FFN%EF%BC%89%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E4%BB%8E%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0%E5%88%B0MoE.html" title="4为什么Transformer少不了前馈神经网络（FFN）（二）：从激活函数到MoE">4为什么Transformer少不了前馈神经网络（FFN）（二）：从激活函数到MoE</a>
+    <a href="dl/2_transformer/5Add%20%26%20Norm%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E5%AF%B9%E6%AE%8B%E5%B7%AE%E8%BF%9E%E6%8E%A5%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90.html" title="5Add &amp; Norm（一）：对残差连接深入解析">5Add &amp; Norm（一）：对残差连接深入解析</a>
+    <a href="dl/2_transformer/6Add%20%26%20Norm%20%EF%BC%88%E4%BA%8C%EF%BC%89%E4%BB%8E%E4%BC%A0%E7%BB%9FCV%E5%88%B0Transformer%E9%87%8C%E7%9A%84Normalizaiton%E8%AF%A6%E8%A7%A3.html" title="6Add &amp; Norm （二）从传统CV到Transformer里的Normalizaiton详解">6Add &amp; Norm （二）从传统CV到Transformer里的Normalizaiton详解</a>
+    <a href="dl/2_transformer/7%E6%B5%81%E5%BD%A2%E8%A7%86%E8%A7%92%E4%B8%8B%E7%9A%84Embedding%EF%BC%9A%E4%BB%8E%E7%90%86%E8%AE%BA%E5%88%B0RAG%E5%AE%9E%E8%B7%B5.html" title="7流形视角下的Embedding：从理论到RAG实践">7流形视角下的Embedding：从理论到RAG实践</a>
+    <a href="dl/2_transformer/8%E4%B8%BA%E4%BB%80%E4%B9%88Embedding%E5%8A%A0%E4%B8%8A%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81%E5%90%8E%E4%B8%8D%E4%BC%9A%E7%A0%B4%E5%9D%8F%E8%AF%AD%E4%B9%89%EF%BC%9F.html" title="8为什么Embedding加上位置编码后不会破坏语义？">8为什么Embedding加上位置编码后不会破坏语义？</a>
+    <a href="dl/2_transformer/9%E9%80%9A%E8%BF%87%E4%B8%8B%E6%B8%B8%E4%BB%BB%E5%8A%A1%E7%90%86%E8%A7%A3BERT%E5%92%8CGPT%E7%9A%84%E5%8C%BA%E5%88%AB%EF%BC%9A%E4%B8%8D%E5%8F%AA%E6%98%AF%E5%AE%8C%E5%BD%A2%E5%A1%AB%E7%A9%BA%E5%92%8C%E8%AF%8D%E8%AF%AD%E6%8E%A5%E9%BE%99%20%281%29.html" title="9通过下游任务理解BERT和GPT的区别：不只是完形填空和词语接龙 (1)">9通过下游任务理解BERT和GPT的区别：不只是完形填空和词语接龙 (1)</a>
+    <a href="dl/2_transformer/%E6%90%9E%E6%87%82%20Transformer%20%E5%BD%92%E4%B8%80%E5%8C%96%EF%BC%9APre-Norm%20%E4%B8%8E%20Post-Norm%EF%BC%8C%E5%85%B3%E9%94%AE%E5%B7%AE%E5%BC%82%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F.html" title="搞懂 Transformer 归一化：Pre-Norm 与 Post-Norm，关键差异是什么？">搞懂 Transformer 归一化：Pre-Norm 与 Post-Norm，关键差异是什么？</a>
+    <div class="subdir-label">📂 encoding</div>
+    <a href="dl/2_transformer/encoding/%E4%B8%80%E6%96%87%E9%80%9A%E9%80%8F%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81%EF%BC%9A%E4%BB%8E%E6%A0%87%E5%87%86%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81%E3%80%81%E5%A4%8D%E6%95%B0%E3%80%81%E6%AC%A7%E6%8B%89%E5%85%AC%E5%BC%8F%E5%88%B0%E6%97%8B%E8%BD%AC%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81RoPE%28%E5%90%AB%E5%85%B6%E6%8E%A8%E5%AF%BC%E4%B8%8E%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%29-CSDN%E5%8D%9A%E5%AE%A2.html" title="一文通透位置编码：从标准位置编码、复数、欧拉公式到旋转位置编码RoPE(含其推导与代码实现)-CSDN博客">一文通透位置编码：从标准位置编码、复数、欧拉公式到旋转位置编码RoPE(含其推导与代码实现)-CSDN博客</a>
+    <a href="dl/2_transformer/encoding/%E5%BD%BB%E5%BA%95%E6%90%9E%E6%87%82%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-RoPE%E6%97%8B%E8%BD%AC%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81%EF%BC%88%E5%8A%A8%E5%9B%BE%E8%AE%B2%E8%A7%A3%EF%BC%89.html" title="彻底搞懂深度学习-RoPE旋转位置编码（动图讲解）">彻底搞懂深度学习-RoPE旋转位置编码（动图讲解）</a>
+    <a href="dl/2_transformer/encoding/%E6%8E%A2%E7%A7%98Transformer%E4%B9%8B%EF%BC%888%EF%BC%89---%20%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81%20-%20%E7%BD%97%E8%A5%BF%E7%9A%84%E6%80%9D%E8%80%83%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD.html" title="探秘Transformer之（8）--- 位置编码 - 罗西的思考 - 博客园">探秘Transformer之（8）--- 位置编码 - 罗西的思考 - 博客园</a>
+    <div class="subdir-label">📂 sam</div>
+    <a href="dl/2_transformer/sam/%E4%B8%87%E5%AD%97%20SAM%203%20%E6%8A%A5%E5%91%8A%E8%A7%A3%E6%9E%90%2C%E6%94%AF%E6%8C%81%E5%9B%BE%E5%83%8F%E8%A7%86%E9%A2%91%E4%BB%BB%E6%84%8F%E6%A6%82%E5%BF%B5%E6%A3%80%E6%B5%8B%E4%B8%8E%E8%B7%9F%E8%B8%AA.html" title="万字 SAM 3 报告解析,支持图像视频任意概念检测与跟踪">万字 SAM 3 报告解析,支持图像视频任意概念检测与跟踪</a>
+    <div class="subdir-label">📂 vit</div>
+    <a href="dl/2_transformer/vit/3W%E5%AD%97%E9%95%BF%E6%96%87%E5%B8%A6%E4%BD%A0%E8%BD%BB%E6%9D%BE%E5%85%A5%E9%97%A8%E8%A7%86%E8%A7%89Transformer.html" title="3W字长文带你轻松入门视觉Transformer">3W字长文带你轻松入门视觉Transformer</a>
+    <a href="dl/2_transformer/vit/3%E4%B8%87%E5%AD%97%E9%95%BF%E6%96%87%EF%BC%8CVisual%20Transformer%E5%85%A8%E9%9D%A2%E7%BB%BC%E8%BF%B0.html" title="3万字长文，Visual Transformer全面综述">3万字长文，Visual Transformer全面综述</a>
+    <a href="dl/2_transformer/vit/Transformer%E7%BD%91%E7%BB%9C%E6%9E%B6%E6%9E%84%EF%BC%8C%E5%9B%BE%E8%A7%A3%E6%9C%80%E5%BC%BA%E6%95%99%E7%A8%8B.html" title="Transformer网络架构，图解最强教程">Transformer网络架构，图解最强教程</a>
+  </div>
+</div>
+<div class="category">
+  <h2>📎 RAG 检索增强生成 <span class="count">(4 篇)</span></h2>
+  <div class="file-list">
+    <div class="subdir-label">📂 dl › 3_rag</div>
+    <a href="dl/3_rag/Inkeep%20Built%20an%20Efficient%20RAG-driven%20AI%20Assistant%20using%20Milvus%20-%20Zilliz%20blog.html" title="Inkeep Built an Efficient RAG-driven AI Assistant using Milvus - Zilliz blog">Inkeep Built an Efficient RAG-driven AI Assistant using Milvus - Zilliz blog</a>
+    <a href="dl/3_rag/%E4%B8%87%E5%AD%97%E5%B9%B2%E8%B4%A7%EF%BC%81Advanced%20RAG%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%EF%BC%9A%E6%8B%86%E8%A7%A3%E6%A0%B8%E5%BF%83%E4%BC%98%E5%8C%96%E9%80%BB%E8%BE%91%EF%BC%8C%E8%AE%A9%E4%BD%A0%E7%9A%84%E5%A4%A7%E6%A8%A1%E5%9E%8B%E7%9F%A5%E8%AF%86%E5%BA%93%E9%97%AE%E7%AD%94%E7%B2%BE%E5%BA%A6%E7%BF%BB%E5%80%8D%EF%BC%88%E5%90%AB%E5%AE%9E%E6%88%98%E4%BB%A3%E7%A0%81%EF%BC%89.html" title="万字干货！Advanced RAG从入门到精通：拆解核心优化逻辑，让你的大模型知识库问答精度翻倍（含实战代码）">万字干货！Advanced RAG从入门到精通：拆解核心优化逻辑，让你的大模型知识库问答精度翻倍（含实战代码）</a>
+    <a href="dl/3_rag/%E5%A4%A7%E6%A8%A1%E5%9E%8B%20RAG%20%E5%AE%9E%E6%88%98%E5%85%A5%E9%97%A8%EF%BC%9A%E6%89%8B%E6%8A%8A%E6%89%8B%E7%94%A8%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E7%BB%93%E5%90%88%20LangChain%20%E6%90%AD%E4%B8%80%E4%B8%AA%E7%9F%A5%E8%AF%86%E5%BA%93%E9%97%AE%E7%AD%94%E7%B3%BB%E7%BB%9F.html" title="大模型 RAG 实战入门：手把手用本地大模型结合 LangChain 搭一个知识库问答系统">大模型 RAG 实战入门：手把手用本地大模型结合 LangChain 搭一个知识库问答系统</a>
+    <div class="subdir-label">📂 langchain</div>
+    <a href="dl/3_rag/langchain/Elasticsearch%20integration%20-%20Docs%20by%20LangChain.html" title="Elasticsearch integration - Docs by LangChain">Elasticsearch integration - Docs by LangChain</a>
+  </div>
+</div>
+<div class="category">
+  <h2>🤖 大语言模型 <span class="count">(2 篇)</span></h2>
+  <div class="file-list">
+    <div class="subdir-label">📂 1_rag</div>
+    <a href="dl/llm/1_rag/RAG%20%E6%A3%80%E7%B4%A2%E5%A2%9E%E5%BC%BA%E7%94%9F%E6%88%90%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97.html" title="RAG 检索增强生成入门指南">RAG 检索增强生成入门指南</a>
+    <div class="subdir-label">📂 dl › llm</div>
+    <a href="dl/llm/%E4%B8%87%E5%AD%97%E6%8B%86%E8%A7%A3%EF%BC%81%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0%E5%B8%A6%E4%BD%A0%E7%9C%9F%E6%AD%A3%E7%9C%8B%E6%87%82%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%98%AF%E6%80%8E%E4%B9%88%E8%AE%AD%E7%BB%83%E5%87%BA%E6%9D%A5%E5%B9%B6%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84%EF%BC%81.html" title="万字拆解！一篇文章带你真正看懂大模型是怎么训练出来并跑起来的！">万字拆解！一篇文章带你真正看懂大模型是怎么训练出来并跑起来的！</a>
+  </div>
+</div>
+<div class="category">
+  <h2>📐 深度学习概念 <span class="count">(34 篇)</span></h2>
+  <div class="file-list">
+    <div class="subdir-label">📂 SGD</div>
+    <a href="dl/conception/SGD/Gradient%20Descent%20Algorithm%20in%20Machine%20Learning%20-%20GeeksforGeeks%20%282025_7_25%2009%EF%BC%9A52%EF%BC%9A27%29.html" title="Gradient Descent Algorithm in Machine Learning - GeeksforGeeks (2025_7_25 09：52：27)">Gradient Descent Algorithm in Machine Learning - GeeksforGeeks (2025_7_25 09：52：27)</a>
+    <div class="subdir-label">📂 activate_function</div>
+    <a href="dl/conception/activate_function/Activation%20Functions%20%E2%80%94%20All%20You%20Need%20To%20Know%21%20%20%282025_8_6%2017%EF%BC%9A25%EF%BC%9A14%29.html" title="Activation Functions — All You Need To Know!  (2025_8_6 17：25：14)">Activation Functions — All You Need To Know!  (2025_8_6 17：25：14)</a>
+    <a href="dl/conception/activate_function/%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0.html" title="如何理解激活函数">如何理解激活函数</a>
+    <a href="dl/conception/activate_function/%E6%B7%B1%E5%BA%A6%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0%E7%9A%84%E4%BC%98%E7%BC%BA%E7%82%B9%E5%88%86%E6%9E%90_hard%20sigmoid-CSDN%E5%8D%9A%E5%AE%A2%20%282025_8_7%2009%EF%BC%9A16%EF%BC%9A28%29.html" title="深度神经网络中常用的激活函数的优缺点分析_hard sigmoid-CSDN博客 (2025_8_7 09：16：28)">深度神经网络中常用的激活函数的优缺点分析_hard sigmoid-CSDN博客 (2025_8_7 09：16：28)</a>
+    <div class="subdir-label">📂 anchor-free-base</div>
+    <a href="dl/conception/anchor-free-base/TOOD%EF%BC%9ATask-aligned%20One-stage%20Object%20Detection%20-%20welcome%20to%20x-jeff%20blog.html" title="TOOD：Task-aligned One-stage Object Detection - welcome to x-jeff blog">TOOD：Task-aligned One-stage Object Detection - welcome to x-jeff blog</a>
+    <a href="dl/conception/anchor-free-base/YOLOv8%20%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E4%B8%AD%E7%9A%84%20Anchor-Free%20%E6%9C%BA%E5%88%B6%EF%BC%9A%E5%9B%BE%E7%A4%BA%20%EF%BC%8B%20%E4%BB%A3%E7%A0%81%20%282025_8_28%2009%EF%BC%9A02%EF%BC%9A48%29.html" title="YOLOv8 目标检测中的 Anchor-Free 机制：图示 ＋ 代码 (2025_8_28 09：02：48)">YOLOv8 目标检测中的 Anchor-Free 机制：图示 ＋ 代码 (2025_8_28 09：02：48)</a>
+    <div class="subdir-label">📂 backbone</div>
+    <a href="dl/conception/backbone/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6-Backbone%E6%B1%87%E6%80%BB-CSDN%E5%8D%9A%E5%AE%A2%20%282025_8_7%2020%EF%BC%9A44%EF%BC%9A01%29.html" title="深度学习框架-Backbone汇总-CSDN博客 (2025_8_7 20：44：01)">深度学习框架-Backbone汇总-CSDN博客 (2025_8_7 20：44：01)</a>
+    <a href="dl/conception/backbone/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0%EF%BC%9ACNN%E7%BB%8F%E5%85%B8%E7%BB%93%E6%9E%841%EF%BC%88AlexNet%EF%BC%8CZFNet%EF%BC%8COverFeat%EF%BC%8CVGG%EF%BC%8CGoogleNet%EF%BC%8CResNet.html" title="论文笔记：CNN经典结构1（AlexNet，ZFNet，OverFeat，VGG，GoogleNet，ResNet">论文笔记：CNN经典结构1（AlexNet，ZFNet，OverFeat，VGG，GoogleNet，ResNet</a>
+    <a href="dl/conception/backbone/%E8%AF%A6%E8%A7%A3%E6%AE%8B%E5%B7%AE%E7%BD%91%E7%BB%9C%20-%20%E7%9F%A5%E4%B9%8E.html" title="详解残差网络 - 知乎">详解残差网络 - 知乎</a>
+    <div class="subdir-label">📂 batch_norm</div>
+    <a href="dl/conception/batch_norm/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B8%AD%E7%9A%84Normalization%E6%96%B9%E6%B3%95%20-%20%E5%87%8C%E9%80%86%E6%88%98%20-%20%E5%8D%9A%E5%AE%A2%E5%9B%AD%20%282025_8_29%2017%EF%BC%9A20%EF%BC%9A11%29.html" title="深度学习中的Normalization方法 - 凌逆战 - 博客园 (2025_8_29 17：20：11)">深度学习中的Normalization方法 - 凌逆战 - 博客园 (2025_8_29 17：20：11)</a>
+    <div class="subdir-label">📂 convolution</div>
+    <a href="dl/conception/convolution/1%E8%BD%AC%E7%BD%AE%E5%8D%B7%E7%A7%AF.html" title="1转置卷积">1转置卷积</a>
+    <a href="dl/conception/convolution/conv_arithmetic_Convolution%20animations.html" title="conv_arithmetic_Convolution animations">conv_arithmetic_Convolution animations</a>
+    <a href="dl/conception/convolution/%E4%B8%87%E5%AD%97%E9%95%BF%E6%96%87%E5%B8%A6%E4%BD%A0%E7%9C%8B%E5%B0%BD%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B8%AD%E7%9A%84%E5%90%84%E7%A7%8D%E5%8D%B7%E7%A7%AF%E7%BD%91%E7%BB%9C%EF%BC%88%E4%B8%8A%E7%AF%87.html" title="万字长文带你看尽深度学习中的各种卷积网络（上篇">万字长文带你看尽深度学习中的各种卷积网络（上篇</a>
+    <a href="dl/conception/convolution/%E4%B8%87%E5%AD%97%E9%95%BF%E6%96%87%E5%B8%A6%E4%BD%A0%E7%9C%8B%E5%B0%BD%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B8%AD%E7%9A%84%E5%90%84%E7%A7%8D%E5%8D%B7%E7%A7%AF%E7%BD%91%E7%BB%9C%EF%BC%88%E4%B8%8B%E7%AF%87%EF%BC%89.html" title="万字长文带你看尽深度学习中的各种卷积网络（下篇）">万字长文带你看尽深度学习中的各种卷积网络（下篇）</a>
+    <a href="dl/conception/convolution/%E7%BB%BC%E8%BF%B0%E4%B8%80%E6%96%87%E8%AF%BB%E6%87%82%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%28CNN%29%20-%20%E7%9F%A5%E4%B9%8E.html" title="综述一文读懂卷积神经网络(CNN) - 知乎">综述一文读懂卷积神经网络(CNN) - 知乎</a>
+    <div class="subdir-label">📂 dl › conception</div>
+    <a href="dl/conception/Backpropagation%20in%20Neural%20Network.html" title="Backpropagation in Neural Network">Backpropagation in Neural Network</a>
+    <a href="dl/conception/Computing%20Receptive%20Fields%20of%20Convolutional%20Neural%20Networks%20.html" title="Computing Receptive Fields of Convolutional Neural Networks ">Computing Receptive Fields of Convolutional Neural Networks </a>
+    <a href="dl/conception/Introduction%20to%20Pooling%20Layer.html" title="Introduction to Pooling Layer">Introduction to Pooling Layer</a>
+    <a href="dl/conception/Understanding%20Convolutions%20-%20colah%27s%20blog.html" title="Understanding Convolutions - colah&#x27;s blog">Understanding Convolutions - colah&#x27;s blog</a>
+    <div class="subdir-label">📂 iou</div>
+    <a href="dl/conception/iou/IoU__IoU_GIoU_DIoU_CIoU_ciou-CSDN.html" title="IoU__IoU_GIoU_DIoU_CIoU_ciou-CSDN">IoU__IoU_GIoU_DIoU_CIoU_ciou-CSDN</a>
+    <a href="dl/conception/iou/IoU_GIoU_DIoU_CIoU_SIoU_iou-CSDN.html" title="IoU_GIoU_DIoU_CIoU_SIoU_iou-CSDN">IoU_GIoU_DIoU_CIoU_SIoU_iou-CSDN</a>
+    <a href="dl/conception/iou/YOLOv5___GIoU_DIoU_CIoU_EIoU_AlphaIoU_SIoU_WIoU_yolov5s_eiou-CSDN.html" title="YOLOv5___GIoU_DIoU_CIoU_EIoU_AlphaIoU_SIoU_WIoU_yolov5s_eiou-CSDN">YOLOv5___GIoU_DIoU_CIoU_EIoU_AlphaIoU_SIoU_WIoU_yolov5s_eiou-CSDN</a>
+    <div class="subdir-label">📂 loss_function</div>
+    <a href="dl/conception/loss_function/Focal%20Loss%20for%20Dense%20Object%20Detection%20-%20welcome%20to%20x-jeff%20blog%20.html" title="Focal Loss for Dense Object Detection - welcome to x-jeff blog ">Focal Loss for Dense Object Detection - welcome to x-jeff blog </a>
+    <a href="dl/conception/loss_function/Generalized%20Focal%20Loss%E3%80%81Focal%20Loss%E3%80%81Quality%20Focal%20Loss%E3%80%81Distribution%20Focal%20Loss.html" title="Generalized Focal Loss、Focal Loss、Quality Focal Loss、Distribution Focal Loss">Generalized Focal Loss、Focal Loss、Quality Focal Loss、Distribution Focal Loss</a>
+    <a href="dl/conception/loss_function/Generalized%20Focal%20Loss%E7%9A%84%E8%A7%A3%E8%AF%BB%2C%E4%BA%A4%E5%8F%89%E7%86%B5%E3%80%81Focal%20Loss%E3%80%81Quality%20Focal%20Loss%E3%80%81Distribution%20Focal%20Loss-CSDN%E5%8D%9A%E5%AE%A2.html" title="Generalized Focal Loss的解读,交叉熵、Focal Loss、Quality Focal Loss、Distribution Focal Loss-CSDN博客">Generalized Focal Loss的解读,交叉熵、Focal Loss、Quality Focal Loss、Distribution Focal Loss-CSDN博客</a>
+    <a href="dl/conception/loss_function/Paddle%E6%A1%86%E6%9E%B6%E4%B8%8B%E5%B8%B8%E7%94%A8%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0%E6%80%BB%E7%BB%93%E5%92%8C%E5%AE%9E%E7%8E%B0%20-%20%E9%A3%9E%E6%A1%A8AI%20Studio%E6%98%9F%E6%B2%B3%E7%A4%BE%E5%8C%BA%20%282024_10_10%2021_02_47%29.html" title="Paddle框架下常用损失函数总结和实现 - 飞桨AI Studio星河社区 (2024_10_10 21_02_47)">Paddle框架下常用损失函数总结和实现 - 飞桨AI Studio星河社区 (2024_10_10 21_02_47)</a>
+    <a href="dl/conception/loss_function/Paddle%E6%A1%86%E6%9E%B6%E4%B8%8B%E5%B8%B8%E7%94%A8%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0%E6%80%BB%E7%BB%93%E5%92%8C%E5%AE%9E%E7%8E%B0%20.html" title="Paddle框架下常用损失函数总结和实现 ">Paddle框架下常用损失函数总结和实现 </a>
+    <a href="dl/conception/loss_function/%E4%BA%A4%E5%8F%89%E7%86%B5%E6%8D%9F%E5%A4%B1%28Cross-entropy%29%E5%92%8C%E5%B9%B3%E6%96%B9%E6%8D%9F%E5%A4%B1%28MSE%29%E7%A9%B6%E7%AB%9F%E6%9C%89%E4%BD%95%E5%8C%BA%E5%88%AB%EF%BC%9F%20%282025_8_13%2011%EF%BC%9A33%EF%BC%9A33%29.html" title="交叉熵损失(Cross-entropy)和平方损失(MSE)究竟有何区别？ (2025_8_13 11：33：33)">交叉熵损失(Cross-entropy)和平方损失(MSE)究竟有何区别？ (2025_8_13 11：33：33)</a>
+    <a href="dl/conception/loss_function/%E4%BA%A4%E5%8F%89%E7%86%B5%E6%8D%9F%E5%A4%B1%28Cross-entropy%29%E5%92%8C%E5%B9%B3%E6%96%B9%E6%8D%9F%E5%A4%B1%28MSE%29%E7%A9%B6%E7%AB%9F%E6%9C%89%E4%BD%95%E5%8C%BA%E5%88%AB%EF%BC%9F%20.html" title="交叉熵损失(Cross-entropy)和平方损失(MSE)究竟有何区别？ ">交叉熵损失(Cross-entropy)和平方损失(MSE)究竟有何区别？ </a>
+    <a href="dl/conception/loss_function/%E4%BA%A4%E5%8F%89%E7%86%B5%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0%20-%20%E7%9F%A5%E4%B9%8E%20%282025_8_19%2010%EF%BC%9A47%EF%BC%9A12%29.html" title="交叉熵损失函数 - 知乎 (2025_8_19 10：47：12)">交叉熵损失函数 - 知乎 (2025_8_19 10：47：12)</a>
+    <a href="dl/conception/loss_function/%E4%BB%80%E4%B9%88%E6%98%AF%20logit%EF%BC%9Flogit%20%E5%92%8C%20Odds%E3%80%81sigmod%20%E7%9A%84%E5%85%B3%E7%B3%BB.html" title="什么是 logit？logit 和 Odds、sigmod 的关系">什么是 logit？logit 和 Odds、sigmod 的关系</a>
+    <a href="dl/conception/loss_function/%E4%BF%A1%E6%81%AF%E7%86%B5%E4%B8%8E%E4%BA%A4%E5%8F%89%E7%86%B5%E8%A7%A3%E6%9E%90-CSDN%E5%8D%9A%E5%AE%A2.html" title="信息熵与交叉熵解析-CSDN博客">信息熵与交叉熵解析-CSDN博客</a>
+    <a href="dl/conception/loss_function/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E4%BA%A4%E5%8F%89%E7%86%B5%E6%8D%9F%E5%A4%B1%E4%B8%8EKL%E6%95%A3%E5%BA%A6%E6%8D%9F%E5%A4%B1%E7%9A%84%E5%85%B3%E7%B3%BB%20%282024_10_10%2020_52_13%29.html" title="深入理解交叉熵损失与KL散度损失的关系 (2024_10_10 20_52_13)">深入理解交叉熵损失与KL散度损失的关系 (2024_10_10 20_52_13)</a>
+    <a href="dl/conception/loss_function/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E5%9B%9E%E5%BD%92%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0%E7%AE%80%E4%BB%8B%EF%BC%9ASmoothL1_IoU_GIoU_DIoU_CIoU%20Loss%20-%20%E7%9F%A5%E4%B9%8E.html" title="目标检测回归损失函数简介：SmoothL1_IoU_GIoU_DIoU_CIoU Loss - 知乎">目标检测回归损失函数简介：SmoothL1_IoU_GIoU_DIoU_CIoU Loss - 知乎</a>
+  </div>
+</div>
+<div class="category">
+  <h2>📄 论文与任务 <span class="count">(7 篇)</span></h2>
+  <div class="file-list">
+    <div class="subdir-label">📂 detection › dino</div>
+    <a href="dl/task/detection/dino/%2816%20%E5%B0%81%E7%A7%81%E4%BF%A1%29%20DINO%E7%B3%BB%E5%88%97%E5%B7%A5%E4%BD%9C%E5%9B%9E%E9%A1%BE%EF%BC%88DETR%2C%20DINO%2C%20Grounding%20DINO%2C%20DINO-X%EF%BC%89%20-%20%E7%9F%A5%E4%B9%8E.html" title="(16 封私信) DINO系列工作回顾（DETR, DINO, Grounding DINO, DINO-X） - 知乎">(16 封私信) DINO系列工作回顾（DETR, DINO, Grounding DINO, DINO-X） - 知乎</a>
+    <div class="subdir-label">📂 segment › instance</div>
+    <a href="dl/task/segment/instance/%E3%80%90%E7%BB%8F%E5%85%B8%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB%E3%80%91YOLACT%20%E5%AE%9E%E4%BE%8B%E5%88%86%E5%89%B2%EF%BC%88YOLOv5%E3%80%81YOLOv8%E5%AE%9E%E4%BE%8B%E5%88%86%E5%89%B2%E7%9A%84%E5%9F%BA%E7%A1%80%EF%BC%89-%E9%98%BF%E9%87%8C%E4%BA%91%E5%BC%80%E5%8F%91%E8%80%85%E7%A4%BE%E5%8C%BA.html" title="【经典论文解读】YOLACT 实例分割（YOLOv5、YOLOv8实例分割的基础）-阿里云开发者社区">【经典论文解读】YOLACT 实例分割（YOLOv5、YOLOv8实例分割的基础）-阿里云开发者社区</a>
+    <div class="subdir-label">📂 track</div>
+    <a href="dl/task/track/%5BBoT-SORT%5D%20Robust%20Associations%20Multi-Pedestrian%20Tracking.html" title="[BoT-SORT] Robust Associations Multi-Pedestrian Tracking">[BoT-SORT] Robust Associations Multi-Pedestrian Tracking</a>
+    <a href="dl/task/track/%E5%B8%A6%E4%BD%A0%E5%85%A5%E9%97%A8%E5%A4%9A%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA%EF%BC%88%E4%B8%89%EF%BC%89%E5%8C%88%E7%89%99%E5%88%A9%E7%AE%97%E6%B3%95%26KM%E7%AE%97%E6%B3%95%20-%20%E7%9F%A5%E4%B9%8E.html" title="带你入门多目标跟踪（三）匈牙利算法&amp;KM算法 - 知乎">带你入门多目标跟踪（三）匈牙利算法&amp;KM算法 - 知乎</a>
+    <a href="dl/task/track/%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA%E5%88%9D%E6%8E%A2%EF%BC%88DeepSORT%EF%BC%89%20-%20%E7%9F%A5%E4%B9%8E.html" title="目标跟踪初探（DeepSORT） - 知乎">目标跟踪初探（DeepSORT） - 知乎</a>
+    <a href="dl/task/track/%E8%A7%86%E8%A7%89%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA%E6%BC%AB%E8%B0%88%EF%BC%9A%E4%BB%8E%E5%8E%9F%E7%90%86%E5%88%B0%E5%BA%94%E7%94%A8.html" title="视觉目标跟踪漫谈：从原理到应用">视觉目标跟踪漫谈：从原理到应用</a>
+    <a href="dl/task/track/%E8%AE%B0%E5%BF%86%E5%8D%A1%E5%B0%94%E6%9B%BC%EF%BC%8B%E8%BF%90%E5%8A%A8IoU%E5%8F%8C%E5%89%91%E5%90%88%E7%92%A7%EF%BC%8C%E6%AF%94TrackTrack%E5%86%8D%E6%B6%A81.4%EF%BC%85.html" title="记忆卡尔曼＋运动IoU双剑合璧，比TrackTrack再涨1.4％">记忆卡尔曼＋运动IoU双剑合璧，比TrackTrack再涨1.4％</a>
+  </div>
+</div>
+<div class="category">
+  <h2>⚙️ CI/CD / 数据标注 <span class="count">(22 篇)</span></h2>
+  <div class="file-list">
+    <div class="subdir-label">📂 cvat</div>
+    <a href="dl_cicd/cvat/4.3.CVAT%E2%80%94%E2%80%94%E5%88%86%E5%89%B2%E6%A0%87%E6%B3%A8%E7%9A%84%E8%AF%A6%E7%BB%86%E6%AD%A5%E9%AA%A4-CSDN%E5%8D%9A%E5%AE%A2.html" title="4.3.CVAT——分割标注的详细步骤-CSDN博客">4.3.CVAT——分割标注的详细步骤-CSDN博客</a>
+    <a href="dl_cicd/cvat/Advanced%20%EF%BD%9C%20CVAT.html" title="Advanced ｜ CVAT">Advanced ｜ CVAT</a>
+    <a href="dl_cicd/cvat/Auto-annotation%20API%20%EF%BD%9C%20CVAT.html" title="Auto-annotation API ｜ CVAT">Auto-annotation API ｜ CVAT</a>
+    <a href="dl_cicd/cvat/Automatic%20annotation%20%EF%BD%9C%20CVAT.html" title="Automatic annotation ｜ CVAT">Automatic annotation ｜ CVAT</a>
+    <a href="dl_cicd/cvat/CVAT%20Overview%20%EF%BD%9C%20CVAT.html" title="CVAT Overview ｜ CVAT">CVAT Overview ｜ CVAT</a>
+    <a href="dl_cicd/cvat/Installation%20Guide%20%EF%BD%9C%20CVAT.html" title="Installation Guide ｜ CVAT">Installation Guide ｜ CVAT</a>
+    <a href="dl_cicd/cvat/Models%20%EF%BD%9C%20CVAT.html" title="Models ｜ CVAT">Models ｜ CVAT</a>
+    <a href="dl_cicd/cvat/OpenCV%20and%20AI%20Tools%20%EF%BD%9C%20CVAT.html" title="OpenCV and AI Tools ｜ CVAT">OpenCV and AI Tools ｜ CVAT</a>
+    <a href="dl_cicd/cvat/Semi-automatic%20and%20Automatic%20Annotation%20%EF%BD%9C%20CVAT.html" title="Semi-automatic and Automatic Annotation ｜ CVAT">Semi-automatic and Automatic Annotation ｜ CVAT</a>
+    <a href="dl_cicd/cvat/Serverless%20tutorial%20%EF%BD%9C%20CVAT.html" title="Serverless tutorial ｜ CVAT">Serverless tutorial ｜ CVAT</a>
+    <div class="subdir-label">📂 fiftyone</div>
+    <a href="dl_cicd/fiftyone/CVAT%20Integration%20%E2%80%94%20FiftyOne%201.9.0%20documentation.html" title="CVAT Integration — FiftyOne 1.9.0 documentation">CVAT Integration — FiftyOne 1.9.0 documentation</a>
+    <a href="dl_cicd/fiftyone/det%20and%20seg%20for%20Fine-tune%20YOLOv8%20models%20for%20custom%20use%20cases%20with%20the%20help%20of%20FiftyOne%20%E2%80%94%20FiftyOne%201.9.0%20documentation.html" title="det and seg for Fine-tune YOLOv8 models for custom use cases with the help of FiftyOne — FiftyOne 1.9.0 documentation">det and seg for Fine-tune YOLOv8 models for custom use cases with the help of FiftyOne — FiftyOne 1.9.0 documentation</a>
+    <a href="dl_cicd/fiftyone/FiftyOne%20Basics%20%E2%80%94%20FiftyOne%201.9.0%20documentation.html" title="FiftyOne Basics — FiftyOne 1.9.0 documentation">FiftyOne Basics — FiftyOne 1.9.0 documentation</a>
+    <a href="dl_cicd/fiftyone/FiftyOne%20Basics--Labels%20%E2%80%94%20FiftyOne%201.9.0%20documentation.html" title="FiftyOne Basics--Labels — FiftyOne 1.9.0 documentation">FiftyOne Basics--Labels — FiftyOne 1.9.0 documentation</a>
+    <a href="dl_cicd/fiftyone/FiftyOne%20terminology%20%E2%80%94%20FiftyOne%201.9.0%20documentation.html" title="FiftyOne terminology — FiftyOne 1.9.0 documentation">FiftyOne terminology — FiftyOne 1.9.0 documentation</a>
+    <a href="dl_cicd/fiftyone/FiftyOne%20%E7%9A%84%E6%95%B0%E6%8D%AE%E9%9B%86%E6%A0%87%E6%B3%A8%E5%8A%9F%E8%83%BD%E8%AE%B2%E8%A7%A3_fifyone%E5%B7%A5%E5%85%B7-CSDN%E5%8D%9A%E5%AE%A2.html" title="FiftyOne 的数据集标注功能讲解_fifyone工具-CSDN博客">FiftyOne 的数据集标注功能讲解_fifyone工具-CSDN博客</a>
+    <a href="dl_cicd/fiftyone/fiftyone.core.labels%20%E2%80%94%20FiftyOne%201.13.3%20documentation.html" title="fiftyone.core.labels — FiftyOne 1.13.3 documentation">fiftyone.core.labels — FiftyOne 1.13.3 documentation</a>
+    <a href="dl_cicd/fiftyone/Filtering%20Cheat%20Sheet%20%E2%80%94%20FiftyOne%201.9.0%20documentation.html" title="Filtering Cheat Sheet — FiftyOne 1.9.0 documentation">Filtering Cheat Sheet — FiftyOne 1.9.0 documentation</a>
+    <a href="dl_cicd/fiftyone/Monocular%20Depth%20Estimation%20with%20FiftyOne%20%E2%80%94%20FiftyOne%201.9.0%20documentation.html" title="Monocular Depth Estimation with FiftyOne — FiftyOne 1.9.0 documentation">Monocular Depth Estimation with FiftyOne — FiftyOne 1.9.0 documentation</a>
+    <a href="dl_cicd/fiftyone/Using%20FiftyOne%20Datasets%20%E2%80%94%20FiftyOne%201.13.3%20documentation.html" title="Using FiftyOne Datasets — FiftyOne 1.13.3 documentation">Using FiftyOne Datasets — FiftyOne 1.13.3 documentation</a>
+    <a href="dl_cicd/fiftyone/Using%20FiftyOne%20Datasets%20%E2%80%94%20FiftyOne%201.9.0%20documentation.html" title="Using FiftyOne Datasets — FiftyOne 1.9.0 documentation">Using FiftyOne Datasets — FiftyOne 1.9.0 documentation</a>
+    <a href="dl_cicd/fiftyone/%E4%BD%BF%E7%94%A8CVAT%E5%92%8CFiftyOne%E6%94%B9%E8%BF%9B%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E6%95%B0%E6%8D%AE%E9%9B%86.html" title="使用CVAT和FiftyOne改进计算机视觉数据集">使用CVAT和FiftyOne改进计算机视觉数据集</a>
+  </div>
+</div>
+<div class="category">
+  <h2>🚀 模型部署 <span class="count">(1 篇)</span></h2>
+  <div class="file-list">
+    <div class="subdir-label">📂 量化</div>
+    <a href="dl_deploy/%E9%87%8F%E5%8C%96/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E9%87%8F%E5%8C%96%E5%85%A5%E9%97%A8%EF%BC%9A%E4%BB%8E%20FP32%E3%80%81FP16%E3%80%81BF16%20%E5%88%B0%208bit%E3%80%814bit%20%E9%83%A8%E7%BD%B2%E5%AE%9E%E8%B7%B5.html" title="大模型量化入门：从 FP32、FP16、BF16 到 8bit、4bit 部署实践">大模型量化入门：从 FP32、FP16、BF16 到 8bit、4bit 部署实践</a>
+  </div>
+</div>
+<div class="category">
+  <h2>📷 硬件 / 传感器 <span class="count">(6 篇)</span></h2>
+  <div class="file-list">
+    <div class="subdir-label">📂 range_image</div>
+    <a href="hardware/range_image/range_image.html" title="range_image">range_image</a>
+    <a href="hardware/range_image/Spherical%20Projection%20for%20Point%20Clouds.html" title="Spherical Projection for Point Clouds">Spherical Projection for Point Clouds</a>
+    <div class="subdir-label">📂 rgb</div>
+    <a href="hardware/rgb/%E7%9B%B8%E6%9C%BA%E6%A0%87%E5%AE%9A.html" title="相机标定">相机标定</a>
+    <div class="subdir-label">📂 rgbd</div>
+    <a href="hardware/rgbd/RGBD%E7%9B%B8%E6%9C%BA%E5%AE%9E%E7%94%A8%E9%97%AE%E9%A2%98.html" title="RGBD相机实用问题">RGBD相机实用问题</a>
+    <a href="hardware/rgbd/RGBD%E7%9B%B8%E6%9C%BA%E7%9A%84%E6%A0%87%E5%AE%9A%E5%92%8C%E5%9B%BE%E5%83%8F%E9%85%8D%E5%87%86.html" title="RGBD相机的标定和图像配准">RGBD相机的标定和图像配准</a>
+    <a href="hardware/rgbd/%E4%B8%89%E8%A7%92%E6%B3%95%E5%92%8CTOF%E6%BF%80%E5%85%89.html" title="三角法和TOF激光">三角法和TOF激光</a>
+  </div>
+</div>
+<div class="category">
+  <h2>🌐 网络工具 <span class="count">(2 篇)</span></h2>
+  <div class="file-list">
+    <div class="subdir-label">📂 clash</div>
+    <a href="clash/config%20_%20Clash%20for%20Windows.html" title="config _ Clash for Windows">config _ Clash for Windows</a>
+    <a href="clash/%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E9%A2%84%E5%A4%84%E7%90%86%20_%20Clash%20for%20Windows.html" title="配置文件预处理 _ Clash for Windows">配置文件预处理 _ Clash for Windows</a>
+  </div>
+</div>
+<div class="category">
+  <h2>🛠 开发工具 <span class="count">(7 篇)</span></h2>
+  <div class="file-list">
+    <div class="subdir-label">📂 cmake</div>
+    <a href="tool_develop/cmake/Configuring%20Transitive%20Dependencies%20with%20Modern%20CMake.html" title="Configuring Transitive Dependencies with Modern CMake">Configuring Transitive Dependencies with Modern CMake</a>
+    <div class="subdir-label">📂 docker</div>
+    <a href="tool_develop/docker/Docker%E7%BD%91%E7%BB%9C%E4%BB%8B%E7%BB%8D%20%283_25_2025%205%EF%BC%9A34%EF%BC%9A38%20PM%29.html" title="Docker网络介绍 (3_25_2025 5：34：38 PM)">Docker网络介绍 (3_25_2025 5：34：38 PM)</a>
+    <a href="tool_develop/docker/Docker%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6daemon.json%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BC%98%E5%8C%96%E5%BB%BA%E8%AE%AE%20%283_25_2025%205%EF%BC%9A32%EF%BC%9A16%20PM%29.html" title="Docker配置文件daemon.json介绍及优化建议 (3_25_2025 5：32：16 PM)">Docker配置文件daemon.json介绍及优化建议 (3_25_2025 5：32：16 PM)</a>
+    <div class="subdir-label">📂 gdb</div>
+    <a href="tool_develop/gdb/%E4%BD%BF%E7%94%A8gdb%E8%B0%83%E8%AF%95c_%E7%A8%8B%E5%BA%8F%20%282024_6_11%2012_37_49%29.html" title="使用gdb调试c_程序 (2024_6_11 12_37_49)">使用gdb调试c_程序 (2024_6_11 12_37_49)</a>
+    <div class="subdir-label">📂 git</div>
+    <a href="tool_develop/git/Git%20%E5%A4%A7%E5%85%A8%20-%20Gitee.com%20%282024_8_17%2010_49_07%29.html" title="Git 大全 - Gitee.com (2024_8_17 10_49_07)">Git 大全 - Gitee.com (2024_8_17 10_49_07)</a>
+    <a href="tool_develop/git/Inside_git%20%282024_9_14%2012_49_55%29.html" title="Inside_git (2024_9_14 12_49_55)">Inside_git (2024_9_14 12_49_55)</a>
+    <a href="tool_develop/git/%E6%91%B8%E6%B8%85%20Git%20%E7%9A%84%E9%97%A8%E8%B7%AF%EF%BC%8C%E5%B0%B1%E9%9D%A0%E8%BF%99%2022%20%E5%BC%A0%E5%9B%BE%20%282024_6_11%2012_26_49%29.html" title="摸清 Git 的门路，就靠这 22 张图 (2024_6_11 12_26_49)">摸清 Git 的门路，就靠这 22 张图 (2024_6_11 12_26_49)</a>
+  </div>
+</div>
+<div class="category">
+  <h2>👁 计算机视觉 <span class="count">(1 篇)</span></h2>
+  <div class="file-list">
+    <div class="subdir-label">📂 depth</div>
+    <a href="cv/depth/%2816%20%E5%B0%81%E7%A7%81%E4%BF%A1%29%20%E7%9B%B8%E6%9C%BA%E6%A8%A1%E5%9E%8B%E4%B8%8E%E8%A7%86%E8%A7%89%E6%B5%8B%E8%B7%9D%E4%B8%8D%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97%20-%20%E7%9F%A5%E4%B9%8E.html" title="(16 封私信) 相机模型与视觉测距不完全指南 - 知乎">(16 封私信) 相机模型与视觉测距不完全指南 - 知乎</a>
+  </div>
+</div>
+<div class="category">
+  <h2>🤖 机器人 <span class="count">(1 篇)</span></h2>
+  <div class="file-list">
+    <div class="subdir-label">📂 tf</div>
+    <a href="robot/tf/%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%9D%90%E6%A0%87%E8%BD%AC%E6%8D%A2%E5%85%A8%E8%A7%A3%E6%9E%90%EF%BC%9A%E5%B7%A6%E4%B9%98%E3%80%81%E5%8F%B3%E4%B9%98%E3%80%81%E7%82%B9%E5%8F%98%E6%8D%A2%E4%B8%80%E6%96%87%E6%90%9E%E5%AE%9A.html" title="机器人坐标转换全解析：左乘、右乘、点变换一文搞定">机器人坐标转换全解析：左乘、右乘、点变换一文搞定</a>
+  </div>
+</div>
+<div class="category">
+  <h2>🐍 Python 生态 <span class="count">(2 篇)</span></h2>
+  <div class="file-list">
+    <div class="subdir-label">📂 numpy</div>
+    <a href="package_python/numpy/A%20Visual%20Intro%20to%20NumPy%20and%20Data%20Representation.html" title="A Visual Intro to NumPy and Data Representation">A Visual Intro to NumPy and Data Representation</a>
+    <a href="package_python/numpy/NumPy%20Typecodes%20Cheatsheet.html" title="NumPy Typecodes Cheatsheet">NumPy Typecodes Cheatsheet</a>
+  </div>
+</div>
+<div class="category">
+  <h2>📁 根目录 <span class="count">(1 篇)</span></h2>
+  <div class="file-list">
+    <a href="index.html" title="index">index</a>
+  </div>
+</div>
+</div>
 <script>
-// 自动扫描目录下的 HTML 文件生成导航列表
-// 通过 GitHub API 获取目录结构
-const baseURL = 'https://api.github.com/repos/wyzhu234/cut_web_page/contents';
-
-async function loadDir(dir) {
-  const container = document.querySelector(`[data-dir="${dir}"]`);
-  if (!container) return;
-
-  try {
-    const resp = await fetch(`${baseURL}/${encodeURIComponent(dir)}`);
-    const files = await resp.json();
-    const htmlFiles = Array.isArray(files)
-      ? files.filter(f => f.name.endsWith('.html') && f.type === 'file')
-      : [];
-
-    htmlFiles.sort((a, b) => a.name.localeCompare(b.name, 'zh-CN'));
-
-    container.innerHTML = htmlFiles.map(f =>
-      `<a href="/cut_web_page/${dir}/${encodeURIComponent(f.name)}" title="${f.name}">${f.name.replace(/\.html$/, '')}</a>`
-    ).join('') || '<span style="color:#999;font-size:14px;">暂无文件</span>';
-  } catch {
-    container.innerHTML = '<span style="color:#999;font-size:14px;">加载失败</span>';
-  }
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('[data-dir]').forEach(el => loadDir(el.dataset.dir));
+const searchInput = document.getElementById('search');
+searchInput.addEventListener('input', function() {
+    const q = this.value.toLowerCase().trim();
+    document.querySelectorAll('.category').forEach(cat => {
+        let visible = false;
+        cat.querySelectorAll('.file-list a').forEach(a => {
+            const match = !q || a.textContent.toLowerCase().includes(q);
+            a.style.display = match ? '' : 'none';
+            if (match) visible = true;
+        });
+        cat.style.display = (!q || visible) ? '' : 'none';
+    });
 });
 </script>
+<p style="text-align:center;color:#999;font-size:12px;margin:30px 0;">自动生成于 2026-07-12 10:51</p>
 </body>
 </html>
