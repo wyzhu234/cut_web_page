@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>学习笔记导航</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, 'Segoe UI', system-ui, sans-serif; background: #f5f5f5; color: #333; padding: 40px 20px; }
+    .container { max-width: 960px; margin: 0 auto; }
+    h1 { font-size: 28px; margin-bottom: 8px; }
+    .subtitle { color: #666; margin-bottom: 32px; font-size: 14px; }
+    .category { background: #fff; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+    .category h2 { font-size: 18px; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid #e8e8e8; color: #2c3e50; }
+    .file-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 6px; }
+    .file-list a { display: block; padding: 6px 10px; color: #0366d6; text-decoration: none; font-size: 14px; border-radius: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .file-list a:hover { background: #f0f6ff; }
+    .file-count { font-size: 12px; color: #999; margin-left: 6px; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>📚 学习笔记</h1>
+  <p class="subtitle">深度学习 / 计算机视觉 / 工程实践 · 共 120+ 篇</p>
+
+  <div class="category" id="dl-yolo">
+    <h2>YOLO 目标检测</h2>
+    <div class="file-list" data-dir="dl/yolo"></div>
+  </div>
+
+  <div class="category" id="dl-cnn">
+    <h2>CNN 卷积神经网络</h2>
+    <div class="file-list" data-dir="dl/1_cnn"></div>
+  </div>
+
+  <div class="category" id="dl-transformer">
+    <h2>Transformer</h2>
+    <div class="file-list" data-dir="dl/2_transformer"></div>
+  </div>
+
+  <div class="category" id="dl-rag">
+    <h2>RAG 检索增强生成</h2>
+    <div class="file-list" data-dir="dl/3_rag"></div>
+  </div>
+
+  <div class="category" id="dl-llm">
+    <h2>大语言模型</h2>
+    <div class="file-list" data-dir="dl/llm"></div>
+  </div>
+
+  <div class="category" id="dl-conception">
+    <h2>深度学习概念</h2>
+    <div class="file-list" data-dir="dl/conception"></div>
+  </div>
+
+  <div class="category" id="dl-task">
+    <h2>论文与任务</h2>
+    <div class="file-list" data-dir="dl/task"></div>
+  </div>
+
+  <div class="category" id="hardware">
+    <h2>硬件 / 传感器</h2>
+    <div class="file-list" data-dir="hardware"></div>
+  </div>
+
+  <div class="category" id="clash">
+    <h2>网络工具</h2>
+    <div class="file-list" data-dir="clash"></div>
+  </div>
+
+  <div class="category" id="tool">
+    <h2>开发工具</h2>
+    <div class="file-list" data-dir="tool_develop"></div>
+  </div>
+
+  <div class="category" id="cv">
+    <h2>计算机视觉</h2>
+    <div class="file-list" data-dir="cv"></div>
+  </div>
+
+  <div class="category" id="robot">
+    <h2>机器人</h2>
+    <div class="file-list" data-dir="robot"></div>
+  </div>
+
+  <div class="category" id="python">
+    <h2>Python 生态</h2>
+    <div class="file-list" data-dir="package_python"></div>
+  </div>
+
+  <div class="category" id="cpp">
+    <h2>C++ 生态</h2>
+    <div class="file-list" data-dir="package_cpp"></div>
+  </div>
+</div>
+
+<script>
+// 自动扫描目录下的 HTML 文件生成导航列表
+// 通过 GitHub API 获取目录结构
+const baseURL = 'https://api.github.com/repos/wyzhu234/cut_web_page/contents';
+
+async function loadDir(dir) {
+  const container = document.querySelector(`[data-dir="${dir}"]`);
+  if (!container) return;
+
+  try {
+    const resp = await fetch(`${baseURL}/${encodeURIComponent(dir)}`);
+    const files = await resp.json();
+    const htmlFiles = Array.isArray(files)
+      ? files.filter(f => f.name.endsWith('.html') && f.type === 'file')
+      : [];
+
+    htmlFiles.sort((a, b) => a.name.localeCompare(b.name, 'zh-CN'));
+
+    container.innerHTML = htmlFiles.map(f =>
+      `<a href="/cut_web_page/${dir}/${encodeURIComponent(f.name)}" title="${f.name}">${f.name.replace(/\.html$/, '')}</a>`
+    ).join('') || '<span style="color:#999;font-size:14px;">暂无文件</span>';
+  } catch {
+    container.innerHTML = '<span style="color:#999;font-size:14px;">加载失败</span>';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('[data-dir]').forEach(el => loadDir(el.dataset.dir));
+});
+</script>
+</body>
+</html>
