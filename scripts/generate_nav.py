@@ -50,10 +50,24 @@ def build_css():
     return """<style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
-           background: #f5f5f5; color: #333; padding: 40px 20px; }
-    .container { max-width: 1000px; margin: 0 auto; }
-    h1 { font-size: 28px; margin-bottom: 4px; }
-    .subtitle { color: #666; margin-bottom: 32px; font-size: 14px; }
+           background: #f5f5f5; color: #333; }
+    .layout { display: flex; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+    /* 左侧导航栏 */
+    .sidebar { width: 180px; flex-shrink: 0; position: sticky; top: 0;
+               height: 100vh; overflow-y: auto; padding: 30px 0 20px;
+               border-right: 1px solid #e0e0e0; margin-right: 30px; }
+    .sidebar h3 { font-size: 13px; color: #999; margin-bottom: 10px;
+                  padding-left: 12px; font-weight: 600; letter-spacing: 1px; }
+    .sidebar a { display: block; padding: 6px 12px; color: #555; text-decoration: none;
+                 font-size: 13.5px; border-radius: 6px; margin-bottom: 2px;
+                 overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+                 transition: background .15s; }
+    .sidebar a:hover { background: #e8f0fe; color: #0366d6; }
+    .sidebar a .icon { margin-right: 4px; }
+    /* 右侧主内容 */
+    .main { flex: 1; min-width: 0; padding: 30px 0; }
+    h1 { font-size: 26px; margin-bottom: 4px; }
+    .subtitle { color: #666; margin-bottom: 24px; font-size: 14px; }
     .category { background: #fff; border-radius: 8px; padding: 20px; margin-bottom: 16px;
                 box-shadow: 0 1px 3px rgba(0,0,0,.08); }
     .category h2 { font-size: 17px; margin-bottom: 10px; padding-bottom: 6px;
@@ -69,6 +83,15 @@ def build_css():
     .search-box { width: 100%; padding: 10px 14px; font-size: 15px; border: 2px solid #ddd;
                   border-radius: 8px; margin-bottom: 20px; outline: none; transition: .2s; }
     .search-box:focus { border-color: #0366d6; }
+    /* 移动端适配：侧边栏折叠到顶部 */
+    @media (max-width: 768px) {
+        .layout { flex-direction: column; }
+        .sidebar { width: 100%; height: auto; position: static;
+                   border-right: none; border-bottom: 1px solid #e0e0e0;
+                   padding: 15px 0; margin-right: 0; display: flex; flex-wrap: wrap; gap: 4px; }
+        .sidebar h3 { display: none; }
+        .sidebar a { font-size: 12px; padding: 4px 10px; }
+    }
 </style>"""
 
 
@@ -90,9 +113,9 @@ searchInput.addEventListener('input', function() {
 </script>"""
 
 
-def build_section(cat_path, icon, name, files):
+def build_section(cat_path, icon, name, files, section_id):
     if not files:
-        return ""
+        return "", ""
 
     # 按子目录分组
     groups = {}
@@ -107,7 +130,7 @@ def build_section(cat_path, icon, name, files):
         groups.setdefault(sub, []).append((rel, display))
 
     lines = []
-    lines.append(f'<div class="category">')
+    lines.append(f'<div class="category" id="{section_id}">')
     lines.append(f'  <h2>{icon} {name} <span class="count">({len(files)} 篇)</span></h2>')
     lines.append(f'  <div class="file-list">')
 
@@ -129,37 +152,54 @@ def build_section(cat_path, icon, name, files):
 
     lines.append('  </div>')
     lines.append('</div>')
-    return "\n".join(lines)
+    return "\n".join(lines), name
+
+
+def slugify(name):
+    """将中文名转为拼音风格的 id"""
+    s = name.replace(" ", "_").replace("/", "_").replace("\\", "_")
+    return re.sub(r'[^a-zA-Z0-9_一-鿿]', '', s)
 
 
 def main():
     seen = set()        # 已分配的 relpath，避免重复
-    sections = []
+    sections_html = []
+    sidebar_links = []  # (section_id, icon, name)
 
     # 先处理子目录分类，标记已分配的文件
     for cat_path, name, icon in CATEGORIES:
-        if not cat_path:     # 根目录最后处理
+        if not cat_path:
             continue
         files = collect_html_files(REPO_ROOT, cat_path)
         if not files:
             continue
-        # 标记这些文件已分配
         for rel, _display in files:
             seen.add(rel)
-        section = build_section(cat_path, icon, name, files)
-        if section:
-            sections.append(section)
+        section_id = slugify(name)
+        html, _ = build_section(cat_path, icon, name, files, section_id)
+        if html:
+            sections_html.append(html)
+            sidebar_links.append((section_id, icon, name))
 
     # 最后处理根目录（仅包含未被分类的文件）
     root_files = collect_html_files(REPO_ROOT, "")
     root_files = [(r, d) for r, d in root_files if r not in seen]
     if root_files:
-        section = build_section("", "📁", "根目录", root_files)
-        if section:
-            sections.append(section)
+        section_id = "root"
+        html, _ = build_section("", "📁", "根目录", root_files, section_id)
+        if html:
+            sections_html.append(html)
+            sidebar_links.append((section_id, "📁", "根目录"))
 
     total = len(seen) + len(root_files)
-    sections_html = "\n".join(sections)
+
+    # 构建侧边栏
+    sidebar_items = "\n".join(
+        f'      <a href="#{sid}"><span class="icon">{ico}</span>{nm}</a>'
+        for sid, ico, nm in sidebar_links
+    )
+
+    sections_body = "\n".join(sections_html)
 
     html = f"""<!DOCTYPE html>
 <html lang="zh-CN">
@@ -170,14 +210,20 @@ def main():
   {build_css()}
 </head>
 <body>
-<div class="container">
-  <h1>📚 学习笔记</h1>
-  <p class="subtitle">深度学习 / 计算机视觉 / 工程实践 · 共 {total} 篇</p>
-  <input type="text" id="search" class="search-box" placeholder="🔍 搜索笔记标题..." autofocus>
-  {sections_html}
+<div class="layout">
+  <div class="sidebar">
+    <h3>📂 分类导航</h3>
+{sidebar_items}
+  </div>
+  <div class="main">
+    <h1>📚 学习笔记</h1>
+    <p class="subtitle">深度学习 / 计算机视觉 / 工程实践 · 共 {total} 篇</p>
+    <input type="text" id="search" class="search-box" placeholder="🔍 搜索笔记标题..." autofocus>
+    {sections_body}
+    <p style="text-align:center;color:#999;font-size:12px;margin:40px 0;">自动生成于 {__import__('datetime').datetime.now().strftime('%Y-%m-%d %H:%M')}</p>
+  </div>
 </div>
 {build_js()}
-<p style="text-align:center;color:#999;font-size:12px;margin:30px 0;">自动生成于 {__import__('datetime').datetime.now().strftime('%Y-%m-%d %H:%M')}</p>
 </body>
 </html>"""
 

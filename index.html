@@ -7,10 +7,24 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
-           background: #f5f5f5; color: #333; padding: 40px 20px; }
-    .container { max-width: 1000px; margin: 0 auto; }
-    h1 { font-size: 28px; margin-bottom: 4px; }
-    .subtitle { color: #666; margin-bottom: 32px; font-size: 14px; }
+           background: #f5f5f5; color: #333; }
+    .layout { display: flex; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+    /* 左侧导航栏 */
+    .sidebar { width: 180px; flex-shrink: 0; position: sticky; top: 0;
+               height: 100vh; overflow-y: auto; padding: 30px 0 20px;
+               border-right: 1px solid #e0e0e0; margin-right: 30px; }
+    .sidebar h3 { font-size: 13px; color: #999; margin-bottom: 10px;
+                  padding-left: 12px; font-weight: 600; letter-spacing: 1px; }
+    .sidebar a { display: block; padding: 6px 12px; color: #555; text-decoration: none;
+                 font-size: 13.5px; border-radius: 6px; margin-bottom: 2px;
+                 overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+                 transition: background .15s; }
+    .sidebar a:hover { background: #e8f0fe; color: #0366d6; }
+    .sidebar a .icon { margin-right: 4px; }
+    /* 右侧主内容 */
+    .main { flex: 1; min-width: 0; padding: 30px 0; }
+    h1 { font-size: 26px; margin-bottom: 4px; }
+    .subtitle { color: #666; margin-bottom: 24px; font-size: 14px; }
     .category { background: #fff; border-radius: 8px; padding: 20px; margin-bottom: 16px;
                 box-shadow: 0 1px 3px rgba(0,0,0,.08); }
     .category h2 { font-size: 17px; margin-bottom: 10px; padding-bottom: 6px;
@@ -26,14 +40,43 @@
     .search-box { width: 100%; padding: 10px 14px; font-size: 15px; border: 2px solid #ddd;
                   border-radius: 8px; margin-bottom: 20px; outline: none; transition: .2s; }
     .search-box:focus { border-color: #0366d6; }
+    /* 移动端适配：侧边栏折叠到顶部 */
+    @media (max-width: 768px) {
+        .layout { flex-direction: column; }
+        .sidebar { width: 100%; height: auto; position: static;
+                   border-right: none; border-bottom: 1px solid #e0e0e0;
+                   padding: 15px 0; margin-right: 0; display: flex; flex-wrap: wrap; gap: 4px; }
+        .sidebar h3 { display: none; }
+        .sidebar a { font-size: 12px; padding: 4px 10px; }
+    }
 </style>
 </head>
 <body>
-<div class="container">
-  <h1>📚 学习笔记</h1>
-  <p class="subtitle">深度学习 / 计算机视觉 / 工程实践 · 共 121 篇</p>
-  <input type="text" id="search" class="search-box" placeholder="🔍 搜索笔记标题..." autofocus>
-  <div class="category">
+<div class="layout">
+  <div class="sidebar">
+    <h3>📂 分类导航</h3>
+      <a href="#YOLO_目标检测"><span class="icon">🎯</span>YOLO 目标检测</a>
+      <a href="#CNN_卷积神经网络"><span class="icon">🧠</span>CNN 卷积神经网络</a>
+      <a href="#Transformer"><span class="icon">🔄</span>Transformer</a>
+      <a href="#RAG_检索增强生成"><span class="icon">📎</span>RAG 检索增强生成</a>
+      <a href="#大语言模型"><span class="icon">🤖</span>大语言模型</a>
+      <a href="#深度学习概念"><span class="icon">📐</span>深度学习概念</a>
+      <a href="#论文与任务"><span class="icon">📄</span>论文与任务</a>
+      <a href="#CI_CD___数据标注"><span class="icon">⚙️</span>CI/CD / 数据标注</a>
+      <a href="#模型部署"><span class="icon">🚀</span>模型部署</a>
+      <a href="#硬件___传感器"><span class="icon">📷</span>硬件 / 传感器</a>
+      <a href="#网络工具"><span class="icon">🌐</span>网络工具</a>
+      <a href="#开发工具"><span class="icon">🛠</span>开发工具</a>
+      <a href="#计算机视觉"><span class="icon">👁</span>计算机视觉</a>
+      <a href="#机器人"><span class="icon">🤖</span>机器人</a>
+      <a href="#Python_生态"><span class="icon">🐍</span>Python 生态</a>
+      <a href="#root"><span class="icon">📁</span>根目录</a>
+  </div>
+  <div class="main">
+    <h1>📚 学习笔记</h1>
+    <p class="subtitle">深度学习 / 计算机视觉 / 工程实践 · 共 121 篇</p>
+    <input type="text" id="search" class="search-box" placeholder="🔍 搜索笔记标题..." autofocus>
+    <div class="category" id="YOLO_目标检测">
   <h2>🎯 YOLO 目标检测 <span class="count">(11 篇)</span></h2>
   <div class="file-list">
     <div class="subdir-label">📂 dl › yolo</div>
@@ -50,14 +93,14 @@
     <a href="dl/yolo/%E6%BA%90%E7%A0%81%E7%BA%A7%E8%A7%A3%E8%AF%BB%EF%BC%9AYOLO26%E7%9A%84%E6%96%B0%E6%9E%B6%E6%9E%84%E4%B8%8E%E5%88%9B%E6%96%B0%E8%AE%BE%E8%AE%A1.html" title="源码级解读：YOLO26的新架构与创新设计">源码级解读：YOLO26的新架构与创新设计</a>
   </div>
 </div>
-<div class="category">
+<div class="category" id="CNN_卷积神经网络">
   <h2>🧠 CNN 卷积神经网络 <span class="count">(1 篇)</span></h2>
   <div class="file-list">
     <div class="subdir-label">📂 dl › 1_cnn</div>
     <a href="dl/1_cnn/%E9%80%9A%E9%81%93%E6%B3%A8%E6%84%8F%E5%8A%9BSENet.html" title="通道注意力SENet">通道注意力SENet</a>
   </div>
 </div>
-<div class="category">
+<div class="category" id="Transformer">
   <h2>🔄 Transformer <span class="count">(19 篇)</span></h2>
   <div class="file-list">
     <div class="subdir-label">📂 Attention</div>
@@ -86,7 +129,7 @@
     <a href="dl/2_transformer/vit/Transformer%E7%BD%91%E7%BB%9C%E6%9E%B6%E6%9E%84%EF%BC%8C%E5%9B%BE%E8%A7%A3%E6%9C%80%E5%BC%BA%E6%95%99%E7%A8%8B.html" title="Transformer网络架构，图解最强教程">Transformer网络架构，图解最强教程</a>
   </div>
 </div>
-<div class="category">
+<div class="category" id="RAG_检索增强生成">
   <h2>📎 RAG 检索增强生成 <span class="count">(4 篇)</span></h2>
   <div class="file-list">
     <div class="subdir-label">📂 dl › 3_rag</div>
@@ -97,7 +140,7 @@
     <a href="dl/3_rag/langchain/Elasticsearch%20integration%20-%20Docs%20by%20LangChain.html" title="Elasticsearch integration - Docs by LangChain">Elasticsearch integration - Docs by LangChain</a>
   </div>
 </div>
-<div class="category">
+<div class="category" id="大语言模型">
   <h2>🤖 大语言模型 <span class="count">(2 篇)</span></h2>
   <div class="file-list">
     <div class="subdir-label">📂 1_rag</div>
@@ -106,7 +149,7 @@
     <a href="dl/llm/%E4%B8%87%E5%AD%97%E6%8B%86%E8%A7%A3%EF%BC%81%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0%E5%B8%A6%E4%BD%A0%E7%9C%9F%E6%AD%A3%E7%9C%8B%E6%87%82%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%98%AF%E6%80%8E%E4%B9%88%E8%AE%AD%E7%BB%83%E5%87%BA%E6%9D%A5%E5%B9%B6%E8%B7%91%E8%B5%B7%E6%9D%A5%E7%9A%84%EF%BC%81.html" title="万字拆解！一篇文章带你真正看懂大模型是怎么训练出来并跑起来的！">万字拆解！一篇文章带你真正看懂大模型是怎么训练出来并跑起来的！</a>
   </div>
 </div>
-<div class="category">
+<div class="category" id="深度学习概念">
   <h2>📐 深度学习概念 <span class="count">(34 篇)</span></h2>
   <div class="file-list">
     <div class="subdir-label">📂 SGD</div>
@@ -154,7 +197,7 @@
     <a href="dl/conception/loss_function/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E5%9B%9E%E5%BD%92%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0%E7%AE%80%E4%BB%8B%EF%BC%9ASmoothL1_IoU_GIoU_DIoU_CIoU%20Loss%20-%20%E7%9F%A5%E4%B9%8E.html" title="目标检测回归损失函数简介：SmoothL1_IoU_GIoU_DIoU_CIoU Loss - 知乎">目标检测回归损失函数简介：SmoothL1_IoU_GIoU_DIoU_CIoU Loss - 知乎</a>
   </div>
 </div>
-<div class="category">
+<div class="category" id="论文与任务">
   <h2>📄 论文与任务 <span class="count">(7 篇)</span></h2>
   <div class="file-list">
     <div class="subdir-label">📂 detection › dino</div>
@@ -169,7 +212,7 @@
     <a href="dl/task/track/%E8%AE%B0%E5%BF%86%E5%8D%A1%E5%B0%94%E6%9B%BC%EF%BC%8B%E8%BF%90%E5%8A%A8IoU%E5%8F%8C%E5%89%91%E5%90%88%E7%92%A7%EF%BC%8C%E6%AF%94TrackTrack%E5%86%8D%E6%B6%A81.4%EF%BC%85.html" title="记忆卡尔曼＋运动IoU双剑合璧，比TrackTrack再涨1.4％">记忆卡尔曼＋运动IoU双剑合璧，比TrackTrack再涨1.4％</a>
   </div>
 </div>
-<div class="category">
+<div class="category" id="CI_CD___数据标注">
   <h2>⚙️ CI/CD / 数据标注 <span class="count">(22 篇)</span></h2>
   <div class="file-list">
     <div class="subdir-label">📂 cvat</div>
@@ -198,14 +241,14 @@
     <a href="dl_cicd/fiftyone/%E4%BD%BF%E7%94%A8CVAT%E5%92%8CFiftyOne%E6%94%B9%E8%BF%9B%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E6%95%B0%E6%8D%AE%E9%9B%86.html" title="使用CVAT和FiftyOne改进计算机视觉数据集">使用CVAT和FiftyOne改进计算机视觉数据集</a>
   </div>
 </div>
-<div class="category">
+<div class="category" id="模型部署">
   <h2>🚀 模型部署 <span class="count">(1 篇)</span></h2>
   <div class="file-list">
     <div class="subdir-label">📂 量化</div>
     <a href="dl_deploy/%E9%87%8F%E5%8C%96/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E9%87%8F%E5%8C%96%E5%85%A5%E9%97%A8%EF%BC%9A%E4%BB%8E%20FP32%E3%80%81FP16%E3%80%81BF16%20%E5%88%B0%208bit%E3%80%814bit%20%E9%83%A8%E7%BD%B2%E5%AE%9E%E8%B7%B5.html" title="大模型量化入门：从 FP32、FP16、BF16 到 8bit、4bit 部署实践">大模型量化入门：从 FP32、FP16、BF16 到 8bit、4bit 部署实践</a>
   </div>
 </div>
-<div class="category">
+<div class="category" id="硬件___传感器">
   <h2>📷 硬件 / 传感器 <span class="count">(6 篇)</span></h2>
   <div class="file-list">
     <div class="subdir-label">📂 range_image</div>
@@ -219,7 +262,7 @@
     <a href="hardware/rgbd/%E4%B8%89%E8%A7%92%E6%B3%95%E5%92%8CTOF%E6%BF%80%E5%85%89.html" title="三角法和TOF激光">三角法和TOF激光</a>
   </div>
 </div>
-<div class="category">
+<div class="category" id="网络工具">
   <h2>🌐 网络工具 <span class="count">(2 篇)</span></h2>
   <div class="file-list">
     <div class="subdir-label">📂 clash</div>
@@ -227,7 +270,7 @@
     <a href="clash/%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E9%A2%84%E5%A4%84%E7%90%86%20_%20Clash%20for%20Windows.html" title="配置文件预处理 _ Clash for Windows">配置文件预处理 _ Clash for Windows</a>
   </div>
 </div>
-<div class="category">
+<div class="category" id="开发工具">
   <h2>🛠 开发工具 <span class="count">(7 篇)</span></h2>
   <div class="file-list">
     <div class="subdir-label">📂 cmake</div>
@@ -243,21 +286,21 @@
     <a href="tool_develop/git/%E6%91%B8%E6%B8%85%20Git%20%E7%9A%84%E9%97%A8%E8%B7%AF%EF%BC%8C%E5%B0%B1%E9%9D%A0%E8%BF%99%2022%20%E5%BC%A0%E5%9B%BE%20%282024_6_11%2012_26_49%29.html" title="摸清 Git 的门路，就靠这 22 张图 (2024_6_11 12_26_49)">摸清 Git 的门路，就靠这 22 张图 (2024_6_11 12_26_49)</a>
   </div>
 </div>
-<div class="category">
+<div class="category" id="计算机视觉">
   <h2>👁 计算机视觉 <span class="count">(1 篇)</span></h2>
   <div class="file-list">
     <div class="subdir-label">📂 depth</div>
     <a href="cv/depth/%2816%20%E5%B0%81%E7%A7%81%E4%BF%A1%29%20%E7%9B%B8%E6%9C%BA%E6%A8%A1%E5%9E%8B%E4%B8%8E%E8%A7%86%E8%A7%89%E6%B5%8B%E8%B7%9D%E4%B8%8D%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97%20-%20%E7%9F%A5%E4%B9%8E.html" title="(16 封私信) 相机模型与视觉测距不完全指南 - 知乎">(16 封私信) 相机模型与视觉测距不完全指南 - 知乎</a>
   </div>
 </div>
-<div class="category">
+<div class="category" id="机器人">
   <h2>🤖 机器人 <span class="count">(1 篇)</span></h2>
   <div class="file-list">
     <div class="subdir-label">📂 tf</div>
     <a href="robot/tf/%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%9D%90%E6%A0%87%E8%BD%AC%E6%8D%A2%E5%85%A8%E8%A7%A3%E6%9E%90%EF%BC%9A%E5%B7%A6%E4%B9%98%E3%80%81%E5%8F%B3%E4%B9%98%E3%80%81%E7%82%B9%E5%8F%98%E6%8D%A2%E4%B8%80%E6%96%87%E6%90%9E%E5%AE%9A.html" title="机器人坐标转换全解析：左乘、右乘、点变换一文搞定">机器人坐标转换全解析：左乘、右乘、点变换一文搞定</a>
   </div>
 </div>
-<div class="category">
+<div class="category" id="Python_生态">
   <h2>🐍 Python 生态 <span class="count">(2 篇)</span></h2>
   <div class="file-list">
     <div class="subdir-label">📂 numpy</div>
@@ -265,12 +308,14 @@
     <a href="package_python/numpy/NumPy%20Typecodes%20Cheatsheet.html" title="NumPy Typecodes Cheatsheet">NumPy Typecodes Cheatsheet</a>
   </div>
 </div>
-<div class="category">
+<div class="category" id="root">
   <h2>📁 根目录 <span class="count">(1 篇)</span></h2>
   <div class="file-list">
     <a href="index.html" title="index">index</a>
   </div>
 </div>
+    <p style="text-align:center;color:#999;font-size:12px;margin:40px 0;">自动生成于 2026-07-12 11:03</p>
+  </div>
 </div>
 <script>
 const searchInput = document.getElementById('search');
@@ -287,6 +332,5 @@ searchInput.addEventListener('input', function() {
     });
 });
 </script>
-<p style="text-align:center;color:#999;font-size:12px;margin:30px 0;">自动生成于 2026-07-12 10:51</p>
 </body>
 </html>
