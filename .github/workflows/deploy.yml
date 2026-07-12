@@ -5,6 +5,9 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [master]
+    # 仅当 HTML 文件变更时才触发部署，避免无用构建
+    paths:
+      - '**.html'
 
   # 允许手动触发部署
   workflow_dispatch:
